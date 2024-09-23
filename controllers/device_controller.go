@@ -1,30 +1,26 @@
 package controllers
 
 import (
+	"database/database"
 	"database/models"
-	"database/sql"
+	"fmt"
 	"log"
 )
 
-var DB *sql.DB
-
 func InsertDeviceData(device models.Device) error {
-	// query := `INSERT INTO device(type, port, data, counter, deveui, radio) VALUES (?, ?, ?, ?, ?, ?)`
+	database := database.GetDB()
 
-	// _, err := DB.Exec(query, device.Type, device.Port, device.Data, device.Counter, device.DevEui, device.Radio)
+	if database == nil {
+		return fmt.Errorf("database connection is not initialized")
+	}
+	query := `INSERT INTO device(type, port, data, counter, deveui, radio) VALUES (?, ?, ?, ?, ?, ?)`
 
-	// if err != nil{
-	// 	log.Printf("error di insert database")
-	// 	return err
-	// }
+	_, err := database.Exec(query, device.Type, device.Port, device.Data, device.Counter, device.DevEui, device.Radio)
 
-	// log.Printf("insert data berhasil")
-	log.Printf(device.Data)
-	log.Printf(device.DevEui)
-	log.Printf(device.Radio)	
-	log.Printf(device.Type)	
-	log.Printf("%v",device.Counter)	
-	log.Printf("%v",device.Port)	
+	if err != nil {
+		log.Printf("error di insert database")
+		return err
+	}
 
 	return nil
 }
